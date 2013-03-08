@@ -134,15 +134,19 @@ class auth_plugin_authssp extends DokuWiki_Auth_Plugin {
     }
  
     // switch to simplesaml login if action=login or this browser was logged in recently.
-    if ($_REQUEST["do"] == "login" || ( get_doku_pref('authssp', 'nologin') == 'login' )) {
+    if ($_REQUEST["do"] == "login" || ( get_doku_pref('authssp', '') == 'persistentlogin' )) {
 
+	    set_doku_pref('authssp', 'ask');
 	    $this->as->requireAuth();
+    }
+
+    if ($this->as->isAuthenticated()) {
 	    $attrs = $this->as->getAttributes();
 	 
 	    // check for valid attributes (not empty) and update USERINFO var from dokuwiki
 	    if (!isset($attrs[$this->getConf('ssp_attr_name')][0])) {
 	      $this->exitMissingAttribute('Name');
-      }
+	    }
 	    $USERINFO['name'] = $attrs[$this->getConf('ssp_attr_name')][0];
 	 
 	    if (!isset($attrs[$this->getConf('ssp_attr_mail')][0])) {
@@ -169,10 +173,7 @@ class auth_plugin_authssp extends DokuWiki_Auth_Plugin {
 	    $_SESSION[DOKU_COOKIE]['auth']['user'] = $attrs[$this->getConf('ssp_attr_user')][0];
 	    $_SESSION[DOKU_COOKIE]['auth']['info'] = $USERINFO;
 
-      // remember ssp login for 30d
-      set_doku_pref('authssp', 'login');
-
-      return true;
+	    return true;
 
     } // end if_isAuthenticated()
 
@@ -198,7 +199,7 @@ class auth_plugin_authssp extends DokuWiki_Auth_Plugin {
    */
   public function logOff(){
     // use the simpleSAMLphp authentication object created in trustExternal to logout
-    set_doku_pref('authssp', 'nologin');
+    set_doku_pref('authssp', 'ask');
     if ($this->as->isAuthenticated())
       $this->as->logout('/');
   }
