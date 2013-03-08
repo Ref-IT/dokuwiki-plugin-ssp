@@ -1,0 +1,7 @@
+base    authssp
+author  Michael Braun
+email   michael-dev@fami-braun.de
+date    2013-03-08
+name    SimpleSAML authentification
+desc    Use SimpleSAML as default login provider.
+url     http://www.dokuwiki.org/plugin:authssp
