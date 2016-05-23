@@ -135,12 +135,13 @@ class auth_plugin_authssp extends DokuWiki_Auth_Plugin {
  
     // switch to simplesaml login if action=login or this browser was logged in recently.
     if ($_REQUEST["do"] == "login" || ( get_doku_pref('authssp', '') == 'persistentlogin' )) {
-
+	    set_doku_pref('authssp_orig', 'persistentlogin');
 	    set_doku_pref('authssp', 'ask');
 	    $this->as->requireAuth();
     }
 
     if ($this->as->isAuthenticated()) {
+	    set_doku_pref('authssp', get_doku_pref('authssp_orig', 'ask'));
 	    $attrs = $this->as->getAttributes();
 	 
 	    // check for valid attributes (not empty) and update USERINFO var from dokuwiki
