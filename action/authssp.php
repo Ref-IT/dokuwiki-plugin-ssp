@@ -18,6 +18,30 @@ class action_plugin_authssp_authssp extends DokuWiki_Action_Plugin {
     public function register(Doku_Event_Handler &$controller) {
         $controller->register_hook('TPL_METAHEADER_OUTPUT', 'BEFORE', $this, 'handle_tpl_metaheader_output');
         $controller->register_hook('AJAX_CALL_UNKNOWN', 'BEFORE', $this, 'handle_ajax');
+        $controller->register_hook('TPL_CONTENT_DISPLAY', 'BEFORE', $this, 'hint_login_if_denied');
+        $controller->register_hook('HTML_LOGINFORM_OUTPUT', 'BEFORE', $this, 'drop_login_form');
+    }
+
+    public function drop_login_form(Doku_Event $event, $param) {
+      $event->data = new Doku_Form([]);
+    }
+
+    public function hint_login_if_denied(Doku_Event $event, $param) {
+        global $ACT, $INFO, $USERINFO, $lang;
+
+        if ($ACT != "denied")
+          return;
+
+        if ($USERINFO !== NULL)
+          return;
+
+        $link =  tpl_actionlink("login", '', '', '', true);
+        $tpl = p_locale_xhtml("denied");
+
+       $event->data = $tpl.$link;
+
+       return true;
+
     }
 
     public function handle_ajax(&$event, $param) {
