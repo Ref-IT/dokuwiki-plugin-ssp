@@ -48,7 +48,7 @@ class auth_plugin_authssp extends DokuWiki_Auth_Plugin {
    *
    * @author  Lukas Slansky <lukas.slansky@upce.cz>
    */
-  public function getUserData($user){
+  public function getUserData($user, $requireGroups = true){
 
     if($this->users === null) $this->_loadUserData();
     return isset($this->users[$user]) ? $this->users[$user] : false;
