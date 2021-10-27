@@ -93,6 +93,7 @@ class action_plugin_authssp_authssp extends DokuWiki_Action_Plugin {
             'type' => 'text/javascript',
             'charset' => 'utf-8',
             'src' => $url,
+            'defer' => true
         );
     }
 }
