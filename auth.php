@@ -123,7 +123,7 @@ class auth_plugin_authssp extends DokuWiki_Auth_Plugin {
     require_once($this->getConf('ssp_path') . '/lib/_autoload.php');
  
     // create auth object and use api to require authentication and get attributes
-    $this->as = new SimpleSAML_Auth_Simple($this->getConf('ssp_auth_source'));
+    $this->as = new \SimpleSAML\Auth\Simple($this->getConf('ssp_auth_source'));
 
     if (!empty($_SESSION[DOKU_COOKIE]['auth']['info'])) {
       $USERINFO['name'] = $_SESSION[DOKU_COOKIE]['auth']['info']['name'];
@@ -206,5 +206,3 @@ class auth_plugin_authssp extends DokuWiki_Auth_Plugin {
   }
  
 }
- 
-//Setup VIM: ex: et ts=2 enc=utf-8 :
